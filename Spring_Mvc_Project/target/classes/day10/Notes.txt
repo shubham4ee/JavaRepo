@@ -1,0 +1,222 @@
+Spring MVC
+		Spring Framework provides a separate module called as Spring MVC.
+		MVC stands for Model-View-Controller.
+		It is a commonly used design pattern or architecture for building web applications.
+		
+		M - Model:
+			It is responsible for handling business logic (domain specific logic) of the application.
+			It is also used to store application specific data.
+			Typically, in web applications it is implemented using either simple Java classes
+			(Java Beans) or Enterprise Java Beans (EJBs).
+			
+		V - View:
+			It is responsible for handling presentation logic of the application.
+			Typically, in web applications it is implemented using JSPs.
+			
+		C - Controller:
+			It is responsible for handling the navigation or workflow of the application.
+			Typically, in web applications it is implemented using Servlets.
+			
+		MVC architecture has 2 types:
+			1. MVC 1
+			2. MVC 2
+			
+		MVC 1:
+			In this case, all the 3 aspects: Model-View-Controller are handled using JSPs.
+			Since every thing is handled using JSP, it is called as Page Centric Architecture.
+			This brings tight coupling and therefore it not much recommended.
+			
+		MVC 2:
+			In this case, all the 3 aspects: Model-View-Controller are decoupled from each other.
+			Since everything is separated, it brings loose coupling.
+			Therefore this approach is highly recommended.
+			
+		MVC using Spring:
+			Spring MVC is completely based upon MVC 2 architecture.
+			Therefore, it enforces to follow standard practices.
+			
+		Spring MVC is based upon one more design pattern known as Front Controller.
+		Front Controller is the one and only one controller (servlet) which is responsible for
+		handling navigation and workflow.
+		
+		All incoming requests hit this controller and further it is decided about dispatching the
+		request for further processing.
+		
+		Components in Spring MVC:
+			Spring MVC mainly consists of 5 components.
+			
+			1. Front Controller:
+					It is responsible for accepting all the incoming requests and dispatching them
+					for further processing.
+					It is also responsible for rendering the appropriate view back to the client.
+					In Spring MVC, it is predefined. It is 'DispatcherServlet'
+					
+			2. Controller:
+					It is responsible for handling the request.
+					It acts as a gateway to model.
+					It is also responsible for returning the name of the view that is to be rendered
+					back to the client.
+					It is to be user defined. It is implemented using a simple Java class.
+					
+			3. Model:
+					It is responsible for handling the business logic.
+					It is to be user defined. 
+					It can be implemented using a simple Java class or EJBs.
+					
+			4. View:
+					It is responsible for handling the presentation logic.
+					It is to be user defined.
+					It is implemented using JSPs.
+					
+			5. ViewResolver:
+					It is responsible for resolving the view based upon the view name that is returned
+					by Controller.
+					It is predefined by Spring.
+					Spring provides several view resolvers and the appropriate one is to be used based
+					upon the requirement.
+					The most commonly used is 'InternalResourceViewResolver'.
+					
+			Spring MVC Workflow:
+					Every incoming request goes to Front Controller (DispatcherServlet).
+					Front Controller dispatches that request to the appropriate Controller.
+					Controller handles that request either by itself or delegating the same to Model.
+					Then it returns the name of the view back to Front Controller.
+					Front Controller uses the view name returned from the controller and resolves
+					the view using ViewResolver.
+					Finally, renders the resultant view back to the client.
+					
+		Spring MVC Application Steps:
+				1. Create a maven based Web Project.
+					
+				2. Set up the project specific environment.
+					E.g.
+						JDK Version, Target Runtime, Project Facets etc.
+						
+				3. Add Spring Web Mvc Maven Dependency.
+				
+				4. Configure FrontController (DispatcherServlet) in such a way that it handles all the
+					incoming requests.
+						This can be done by 2 ways:
+							1. Using XML
+							2. Using Java Code (Java Class)
+							
+					FrontController configuration using Java Class:
+						In order to configure FrontController, Spring MVC provides an interface:
+							WebApplicationInitializer.
+							
+						It is used to bootstrap the application and configure FrontController as soon
+						as the application is loaded.
+						
+						It provides a relevant method to handle this. It is 'onStartup()'
+						
+						Its implementation is also used to scan the packages which contain managed
+						components.
+						
+						The 'onStartup()' method accepts 1 parameter of type 'ServletContext'.
+						'ServletContext' is the single object created for the whole web application.
+						
+						Once the 'DispatcherServlet' is instantiated, it needs to be registered against
+						some URL.
+						
+						This is done using inner interface: 'ServletRegistration.Dynamic'
+						
+				5. 		Create a view (JSP Page) which displays some message.
+						Put this view page in some specific folder under /WEB-INF.
+						Since it is a Maven based web project, by default, 'index.jsp' is available.
+						The same can be used for 1st example.
+						
+				6. 		Create a Controller.
+						In Spring MVC, it is a simple Java Class.
+						However, it is necessary to intimate Spring MVC that this class is not an 
+						ordinary class; rather it is a Controller.
+						This is done using '@Controller' annotation.
+						It is to be at the class level.
+						
+						Once the class is created, it can be used to handle request.
+						This is done by defining a method that is known as Request Handling Method.
+						Typically, this method returns a view name
+						
+						Once the method is defined, it is necessary to intimate Spring MVC that this
+						method is not an ordinary method; rather is a Request Handling Method.
+						
+						This is done using '@RequestMapping' annotation. 
+						It is to be applied at the method level.
+						
+				7. 		Configure View Resolver
+						Since the Controller returns the view name, the actual view is to be resolved
+						using a View Resolver.
+						
+						Spring MVC provides several view resolvers but the most commonly used is
+						'InternalResourceViewResolver'
+						
+						It mainly works upon 2 properties: 
+							prefix and suffix
+							
+						To configure view resolver, Spring MVC provides an interface:
+							WebMvcConfigurer
+						
+						Apart from configuration, it provides some CALLBACK mechanism.
+						In order to enable this mechanism, Spring MVC provides an annotation:
+						'@EnableWebMVC'
+						
+						It is to be applied at the class level of the implementation class of 
+							'WebMvcConfigurer'.
+							
+						'WebMvcConfigurer' is a marker interface. It does not provide any method
+						but provides CALLBACK mechanism.
+	
+	HTML Form Processing:
+		Processing the HTML Form is a very common requirement in web applications.
+		Spring MVC provides support for the same with the help of relevant methods in
+		the controller implementation class.
+		
+		Generally, while processing HTML Forms, HTTP POST request is made. 
+		On the controller side, the request handling method should be configured in such a 
+		way that it handles HTTP POST request.
+		
+		This is done using an enum: 'RequestMethod'.
+		
+		Since client sends information towards server, it needs to be captured inside some
+		variable in the controller specific class.
+		
+		This is done by using parameterized request handling method.
+		
+		Once the parameters are declared, it is necessary to bind request specific parameters
+		with method signature parameters.
+		
+		E.g.
+		Req parameters: user_name and user_password
+		
+		Signature parameters: uid and pwd
+		
+		This is done using '@RequestParam' annotation.
+		It is to be applied at the signature parameter level.
+				
+					
+					
+					
+					
+					
+			
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+			
+		
+		
+		
+		
+		
+		
+		
+		
