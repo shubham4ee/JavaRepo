@@ -1,0 +1,230 @@
+
+	Java Frameworks:
+		In modern Java programming model, frameworks play an important role. They provide the basic foundation
+		along with the workflow and can be customized depending upon the domain requirements.
+		
+		What is a Framework:
+			A framework is a partial solution that is used to address common problems.
+			It mainly provides its own library as well as workflow.
+			
+		There are mainly 2 popular frameworks currently in use:
+			1. Hibernate
+			2. Spring
+			
+		Hibernate:
+			It is an open source Java Based Framework meant for handling persistence layer of the business
+			application.
+			
+			The layer which is responsible for interacting with Database to perform CRUD operations is known as
+			Persistence Layer.
+			
+			It is a framework which follows ORM principles.
+			
+			What is ORM?
+					It stands for Object to Relational Mapping.	
+					It maps the domain objects to relational database tables based upon some mapping metadata.
+					It is a set of principles as per the following:
+						1. Automated Persistence
+						2. Support for Object Modeling
+						3. Querying the database without SQL
+						4. Performance Optimization
+						
+					Automated Persistence:
+						This allows to handle CRUD operations without writing boiler-plate code.
+						This saves a lot of plumbing work e.g. resource building, transactions and so on.
+						
+					Support for Object Modeling:
+						Since Java is object oriented language, may express entities using object models e.g. Inheritance,
+						Containment and so on.
+						ORM provides support for this mapping as well to resolve this mismatch.
+						
+					Querying the database without SQL
+						Allows to perform query operations without writing SQL queries.
+						Provides its own query language that is designed to work with classes and their properties.
+						
+					Performance Optimization
+						Allows to optimize the performance using several techniques e.g. fetching, caching etc.
+						
+			Any framework which follows these principles is known as ORM Framework.
+			
+			There are several Java based ORM frameworks available:
+				1. Hibernate
+				2. Toplink
+				3. Eclipselink
+				4. IBatis
+				
+		Hibernate:
+			It is the most popular framework based upon ORM. 
+			Since it is a Java based framework, it performs persistence related operations using an underlying JDBC
+			API.
+			Therefore, it is an abstraction on the top of JDBC.
+			
+		Hibernate Core API:
+			The core API of Hibernate mainly provides following:
+				1. Session 
+				2. SessionFactory
+				3. Configuration
+				4. Transaction
+				5. Query
+				
+			Session:
+				It is an interface from 'org.hibernate' package.
+				It is a lightweight object used to handle CRUD operations.
+				It provides relevant methods to handle these operations.
+				
+			SessionFactory:
+				It is an interface from 'org.hibernate' package.
+				It is a heavyweight object that is used to obtain the 'Session'.
+				Therefore it is recommended to have a single SessionFactory for the whole application.
+				
+			Configuration:
+				It is a class from 'org.hibernate.cfg' package.
+				It is used to configure Hibernate based upon the given metadata.
+				It is also used to obtain 'SessionFactory'.
+				It is no longer needed once the 'SessionFactory' is built.
+				
+			Transaction:
+				It is an interface from 'org.hibernate' package.
+				It is used to maintain atomicity (Execute ALL or NONE).
+				
+			Query:
+				It is an interface from 'org.hibernate.query' package.
+				It is used to perform query operations to get the data.
+				
+			Metadata in Hibernate:
+				Hibernate can manage the persistence related operations using some metadata.
+				There are 2 types of metadata:
+					1. Mapping Metadata
+					2. Configuration Metadata
+					
+				Mapping Metadata:
+					This is used to map Java classes with Database tables and fields with columns and so on.
+					It can be specified by 2 ways:
+						1. Using XML
+						2. Using Annotations
+						
+						Using XML:
+							The mapping entries are specified using some XML file which is referred as HBM file.
+							HBM stands for Hibernate Mapping.
+							By convention, its name is in following format:
+								<Entity-Class-Name>.hbm.xml.
+							E.g.
+								If the entity class name is 'Customer', the file name will be 'Customer.hbm.xml'
+						
+						Using Annotations:
+							The mapping entries are specified within the source code of the entity class itself.
+							Even though they bring tight coupling, they are frequently used for supporting RAD.
+			
+				Configuration Metadata:
+					It is the metadata that mainly holds Database specific configuration and depending upon the
+					requirement, Hibernate specific configuration.
+					
+					It can be specified by 2 ways:
+						1. Declaratively
+						2. Programmatically
+						
+					Declarative Approach:
+						In this case, the configuration metadata is specified either using XML file or PROPERTIES file.
+						Mostly it is XML file. It is referred as CFG file.
+						
+						By default, Hibernate standardizes the name of CFG file as 'hibernate.cfg.xml'.
+						In case of properties file, Hibernate always goes for 'hibernate.properties' file.
+						
+					Programmatic Approach:
+						In this case, rather than depending upon a separate file, configuration is done using a Java code.
+	
+	Building First Hibernate Application:
+		Step 1:
+			Install the required library files (JAR files) of Hibernate.
+			This can be done by 2 ways:
+				1. Download them manually from Internet.
+				2. Use some build tool e.g. Maven, Gradle and so on.
+				
+			Since Maven is the popular build tool for dependency management, it is necessary to create Maven
+			based project.
+			
+				a) File  ---> New ----> Maven Project
+				b) Check the checkbox for Simple Project Creation
+				c) Fill up the project details e.g. Group ID, Artifact ID, Project Name etc. and Finish
+				
+		Step 2:
+			Once the Maven project is created, it is necessary to configure it.
+			E.g.
+				a) Setting the JDK version
+				b) Adding the dependencies etc.
+						Apart from setting JDK version, the other Maven specific project related configurations are
+						done using a configuration file known as 'pom.xml'.
+						
+						POM: Project Object Model
+						
+						The dependencies are added using the tag: '<dependencies>' which contains a child tag:
+						'<dependency>'
+						
+				How dependencies are resolved?
+					In order to resolve dependencies, Maven uses some storage called as Repository.
+					Repositories are of 3 types:
+						1. Local
+						2. Central
+						3. Remote
+						
+					Local: 
+						It is the repository available on the local system.
+						Maven, by default, tries to search for the dependency in this repository.
+						If found, installs the dependency otherwise searches in its central repository unless any remote
+						repository is configured.
+						
+					Central:
+						This is the repository Maven uses always for all the dependencies for first time unless any remote
+						repository is configured.
+						
+					Remote:
+						By any chance if the dependencies are available on some remote server which is other than Maven
+						central repository, then it is called as Remote repository.
+						
+		Step 3:
+			Create an entity class	
+				This is the class of which an object will be persisted as a record into the underlying database table.
+				It must have no-argument constructor.
+				If it is being added in Hash-Based collections, it must override 'hashCode()' and 'equals()' methods.
+				
+		Step 4:
+			Provide mapping file
+				The entity class needs to be mapped with Database table. This is done using some mapping file 
+				referred as HBM file.
+				This file is to be kept inside 'src/main/resources' folder.
+				
+				The entity class that is being mapped with the database table must have at least one property which
+				acts as an identity.
+				
+		Step 5:
+			Provide configuration file:
+				Since Hibernate uses JDBC as an underlying API, it needs the information using which in can connect 
+				to database. This done using some configuration file referred as CFG file.
+				
+				This is either XML or PROPERTIES file but mostly XML is used.
+				By default, Hibernate refers to 'hibernate.cfg.xml'.
+				This file is also to be kept inside 'src/main/resources' folder.
+				
+		Step 6:
+			Write Main Program:
+				1. Configure the Hibernate using 'org.hibernate.cfg.Configuration' class.
+				2. Obtain 'SessionFactory' using 'Configuration'.
+				3. Obtain 'Session' using 'SessionFactory'
+				4. Create Entity Class Object
+				5. Start the transaction if the operation is a DML operation. It is not required for SELECT operation.
+				6. Store the object of the entity class.
+				7. Commit the transaction
+				8. Close the Session
+				9. Close the SessionFactory
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+	

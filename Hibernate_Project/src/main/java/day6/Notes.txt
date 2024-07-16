@@ -1,0 +1,227 @@
+Hibernate Application Workflow:
+	1. When the object of 'Configuration' class is created, Hibernate looks for the configuration entries inside 
+		a PROPERTIES file called as 'hibernate.properties'.
+		
+		If the file is available, Hibernate loads the entries from that file.
+		
+	2. If the PROPERTIES file is not available and 'hibernate.cfg.xml' file is available, then it is necessary to intimate
+		Hibernate about the same.
+		
+		This is done by calling 'configure()' method of 'Configuration' class.
+		By any chance, this file name is other than 'hibernate.cfg.xml', it is to mentioned explicitly.
+		This is done using overloaded 'configure()' method that accepts String which indicates file name.
+		
+	3. Once the configuration is done either using PROPERTIES file or XML file or even using programmatic approach,
+		a 'SessionFactory' can be obtained.
+		
+	4. Once 'SessionFactory' is obtained, it can be used to obtain the 'Session'.
+	
+	5. Once 'Session' is obtained, it can be used to perform CRUD operations.
+		If the operations are DML operations, then 'Transaction' is required. It is obtained using 'Session'.
+		
+	6. The 'Transaction' is obtained using 'beginTransaction()' method from 'Session' interface.
+		This method disables AutoCommit, so that on as need basis, developer can decide whether to commit or not.
+		
+	Persistence Context:
+		It is the main object which is solely responsible for handling persistence related operations i.e. CRUD operations.
+		E.g. 
+			In JDBC, it is 'Connection' and in Hibernate, it is 'Session'.
+			
+		Since Hibernate is an abstraction (wrapper) on the top of JDBC, 'Session' is an abstraction (wrapper) on the
+		top of 'Connection'.
+		
+	Hibernate without XML:
+		In early days, XML was only the option for handling mapping and configuration. As per the new versions, there
+		is an alternative.
+		
+		E.g.
+			Mappings can be done using Annotations
+			Configuration can be done programmatically.
+			
+		This allows developers to discard XML files completely.
+		
+		Annotation Based Mapping Metadata:
+			There are 2 options to handle mapping metadata using annotations:
+				1. Hibernate Annotations
+				2. JPA Annotations
+				
+			Hibernate Annotations:
+				Hibernate provides its own library specifically meant for annotations. This can be used to handle
+				annotation based mapping metadata.
+				However, in many projects, this has been standardized using JPA annotations.
+				
+			JPA Annotations:
+				What is JPA?
+					JPA stands for Jakarta Persistence API (Old Name: Java Persistence API)
+					It is a specification.
+					It uses some ORM behind the scenes.
+					
+				Any Java Based ORM is a wrapper on the top of JDBC and JPA is a wrapper on the top of some Java
+				Based ORM. 
+				
+				This increases one more level of abstraction.
+				Due to this, applications are more loosely coupled.
+				It becomes easy to migrate from one ORM to another ORM.
+				
+				In the context of JPA annotations, the class of which objects are to be stored as records in the database
+				table, that class is referred as Entity class.
+				
+				Any class can be declared as JPA Entity if it is annotated with '@Entity' annotation.
+				It is to be applied at the class level.
+				
+				Once the entity class is declared, it is to be mapped with the database table.
+				This is done using '@Table' annotation and it is also applied at the class level.
+				
+				Once the Class and Table mapping is done, it is necessary to declare at least one property from that class
+				as an identity.
+				This is done using '@Id' annotation.
+				It can be applied either at the field level or at the getter method level of that field.
+				
+				Every field from entity class needs to be mapped with the corresponding column of the database table.
+				This is done using '@Column' annotation.
+				It can be applied either at the field level or at the getter method level of that field.
+				
+				(It is not possible to mix the targets for @Id and @Column annotations)
+				
+		Programmatic Configuration:
+			Like mapping, in Hibernate, configuration can also be done without XML. This is possible by using relevant
+			methods of 'Configuration' class.
+			
+			E.g.
+				setProperty(String, String)
+				setProperties(java.util.Properties)
+				
+			Once the properties have been set, it is necessary to register the entity class with the 'Configuration'.
+			This is possible using 'addAnnotatedClass()' method from 'Configuration' class.
+			The method accepts 1 parameter of type: 'java.lang.Class'.
+			
+	
+	Data Retrieval against ID:
+			To perform any CRUD operation, 'Session' is required.
+			It provides several relevant methods to handle them.
+			E.g.
+				persist() : Used for Record Insertion
+			
+			Sometimes, it is necessary to fetch the data against identity.
+			This is done using 'find()' method.
+			It mainly accepts 2 parameters:
+				1. java.lang.Class			: The 'Class' class reference of the entity class.
+				2. java.io.Serializable	: The 'Serializable' interface reference indicating the ID field.
+				
+			Rules about Identity:
+				Hibernate enforces some rules about the property of the entity class which is declared as an identity.
+				
+				1. It must be 'Serializable'
+				2. It must override 'hashCode()' and 'equals()'
+				
+			Since data retrieval is not a DML operation, it does not need 'Transaction'.
+			
+	DML UPDATE Operation:
+			Since it is a DML operation, it needs a transaction.
+			This operation is performed using following steps:
+				1. Fetch the Movie object against its identity.
+				2. Start the transaction.
+				3. Make changes using setter methods.
+				4. Commit the transaction.
+				
+	DML DELETE Operation:
+			Since it is a DML operation, it needs a transaction.
+			This operation is performed using following steps:
+				1. Fetch the Movie object against its identity.
+				2. Start the transaction.
+				3. Perform removal
+				4. Commit the transaction.
+				
+	Retrieving Multiple Records:
+			In order to retrieve data from database using Hibernate, 'Session' interface provides 'find()' method.
+			This method accepts ID of the entity in the form of 'Serializable'.
+			
+			It returns single object of an entity class. This is insufficient for retrieving multiple records.
+			
+			Retrieving multiple records is a very common requirement. 
+			In Hibernate, this is made possible using HQL.
+			HQL stands for Hibernate Query Language.
+			
+			HQL works with classes and their properties rather than tables and their columns.
+			In order to work with HQL, Hibernate provides 'Query' interface.
+			
+			Using HQL:
+				In order to use HQL, Hibernate provides mainly 2 clauses:
+					1. FROM
+					2. SELECT
+					
+				FROM Clause:
+					It is the simplest form of HQL. It directly works with the entity class objects; rather it returns
+					them back.
+					
+					Once the query string is built, it can be used to obtain the reference of type 'Query'.
+					This is possible using 'createQuery()' method of 'Session' interface.
+					
+					It always returns a list holding objects of entity class. It is very simple to use but can cause memory
+					implications if the fully loaded data is not utilized.
+					
+					To address this problem, Hibernate provides SELECT clause.
+					
+				SELECT Clause:
+					It makes use of FROM clause as well. It is bit tricky to manage but efficient from memory 
+					perspective as it allows to load the data as per the requirement.
+					
+					It always returns a list holding objects of type: Array of type java.lang.Object.
+					
+				Using Constructor Expression:
+					The list returned by SELECT clause contains an array of type 'Object'. This becomes difficult to
+					manage.
+					Secondly, the data that is to be loaded, is the very frequent requirement, Hibernate allows to load
+					the objects of some bean in the list so that processing becomes easy.
+					
+					This is possible using constructor expression.
+					
+					It uses 'new' keyword in the query string.
+					
+					Once used, the resultant list starts holding the objects of the corresponding bean class. This adds
+					simplicity.
+					
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	

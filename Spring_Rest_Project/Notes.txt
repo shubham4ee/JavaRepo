@@ -1,0 +1,294 @@
+=====================================================================
+
+	Spring REST:
+		REST stands for Representational State Transfer.
+		It is one type of Web Service.
+		
+		What is Web Service?
+			It is a software system that is designed to support machine-to-machine 
+			interoperable communication over the network.
+			
+		There are 2 types of Web Services:
+			1. SOAP Based
+			2. Restful
+			
+		SOAP Based:
+			SOAP stands for Simple Object Access Protocol.
+			It uses XML as a medium for data transfer and HTTP protocol for network 
+			communication.
+			
+			Thus,
+			SOAP = HTTP + XML
+			
+		Restful:
+			In recent years, there is an alternative that has been emerged which emphasizes 
+			upon information-centric architecture, known as Restful Web Services.
+			
+			REST is Representational State Transfer.
+			
+			It emphasizes upon representing the state of some resource in some format which
+			is suitable to the consumer.
+			
+			There are several possible formats in which the state can be represented but
+			the most popular, commonly and frequently used format is JSON.
+				JSON stands for Java Script Object Notation.
+			
+			It is the format that is widely used by Java Script enabled client side technologies
+			like Angular, React JS, Vue JS and so on.
+			
+			Communication in REST:
+				It is possible to transfer the information in both the directions.
+				Server to Client (Java to JSON) or Client to Server (JSON to Java)
+				
+			Implementing REST:
+				Different technologies provide their own standard for building REST API.
+				In case of Java, there are mainly 3 approaches:
+					1. Jersey Framework
+					2. Spring MVC Framework
+					3. Spring Boot Framework
+					
+				Jersey Framework:
+					It is an open source framework based upon Java Technology. 
+					Java developers without having knowledge on Spring generally opt for this.
+					
+				Spring MVC Framework:
+					This option is especially used when REST resources are to be combined with
+					existing Web Application which is built using Spring MVC.
+					
+				Spring Boot Framework:
+					This option is especially used when the focus is extensively on REST resources,
+					ultimately, building the Java Backend side of the Full Stack Application.
+					
+			Implementing REST API using Spring Boot:
+				There are 3 ways to build REST API using Spring Boot.	
+				1. Spring Boot Starters
+				2. Spring Boot CLI
+				3. Spring Initializer
+				
+			Spring Boot Starters:
+				Spring Boot provides some starter projects which simplify the further development.
+				Some IDEs provide built-in plug-ins for these starters.
+				E.g.
+					STS (Spring Tools Suite)
+					
+			Spring Boot CLI:
+				It is a command line interface that is used to build Spring Boot projects.
+				
+			Spring Initializer:
+				It is a web interface that is used to build Spring Boot projects.
+				
+		Why Spring Boot is so popular?
+			Spring Boot adds a lot of simplicity in development.
+			It provides embedded Tomcat as a Web Container
+			It reduces a lot of configuration.
+			
+		Building REST API using Spring Boot Steps:
+			1. Open Web Browser and type the URL: start.spring.io
+			
+			2. Enter all the project specific details e.g. metadata, version, dependencies
+				(web and devtools) and click 'Generate' to download the ZIP file.
+				
+			3. Unzip that file and import the project into Eclipse Workspace
+			
+				Understanding Spring Boot API:
+				
+				Spring Boot API mainly provides following:
+					1. SpringBootApplication
+					2. SpringApplication
+					
+				SpringBootApplication:
+					It is an annotation that is used to configure Spring Boot project.
+					It is a combination of 3 annotations:
+						a) @Configuration
+						b) @ComponentScan
+						c) @EnableAutoConfiguration
+						
+				SpringApplication:
+					It is a class that is used to bootstrap Spring Boot project.
+					It is used to kick start the embedded Tomcat server through its 'static'
+					method called as 'run()'.
+					
+			4. Create REST End-point:
+					The service provider has to configure REST end-points using which clients can
+					make requests to that REST API.
+					
+					This is done by defining a Java Class.
+					Once the class is created, it is necessary to intimate Spring Boot that this class
+					is not an ordinary class; rather it is a controller class meant for building REST
+					API.
+					
+					This is done using @RestController annotation.
+					It is to be applied at the class level.
+					
+					To actually create the end-point, define a method that returns some data.
+					To mark that method as an end-point, annotate it using '@RequestMapping'
+					annotation with the corresponding end-point.
+					
+					URLs in REST:
+						Unlike Spring MVC, Spring REST applications do not have end-points with
+						Context Root.
+						
+						This is because, instead of deploying the application on the Tomcat server, the
+						server itself gets embedded into the application.
+						
+						This type of architecture is called as Micro Service Architecture.
+						
+					Changing the Port Number:
+						The embedded Tomcat server by default gets started on Port 8080.
+						Since 8080 is a very commonly used port, provider may want to change it.
+						This is done by making relevant entry into some configuration file called as:
+							'application.properties'.
+							
+						It is located under: 'src/main/resources'
+						
+						JSON Format
+						{
+							"firstName":"Hritik",
+							"lastName":"Roshan",
+							"profession":"Actor"
+							,"age":51
+						}
+						
+						JSON Array
+						[
+							{"firstName":"Hritik","lastName":"Roshan","profession":"Actor","age":51},
+							{"firstName":"Virat","lastName":"Kohli","profession":"Cricketer","age":35},
+							{"firstName":"Steffi","lastName":"Graf","profession":"Tennis Player","age":55}
+						]
+						
+						Conversion between Java Object and JSON:
+							Conversion between Java Object and JSON takes place using some 3rd party
+							library or API called as Jackson API.
+							
+			Implementing Layered Architecture:
+				While building REST APIs, to simplify the development, layered architecture is used.
+				It mainly consists of 3 layers:
+					1. Controller
+					2. Service
+					3. Repository
+					
+				Controller:
+					This is the layer with which REST client interacts.
+					It is implemented using @RestController annotated class.
+					
+				Service:
+					This is the layer which is responsible for handling business logic if any.
+					It is implemented using @Service annotated class.
+					
+				Repository
+					This is the layer which is responsible for interacting with Data Store.
+					It is implemented using @Repository annotated class.
+					
+		Handling Parameterized URLs:
+				The REST end-point URLs may have parameters.
+				These parameters are configured using '{ }' notation.
+				E.g.
+					/URL/{param}		
+					
+				Once the URL is configured to accept parameter or parameters, it is necessary
+				to bind that parameter with the local variable declared in the method signature.
+				This is done using '@PathVariable' annotation.
+				
+				It is to be applied at the method signature parameter level.
+				
+		Handling POST Request:
+			Sometimes, instead of fetching the data from REST API, REST client may want to
+			send some data for further processing.
+			
+			E.g.
+				Adding a new resource.
+			
+			In this case, client generally sends JSON data which is eventually converted into
+			a Java Object and so on.
+			
+			Whenever it is about adding a new resource, REST client has to make a POST request.
+			
+			When client sends JSON data along with the request, that data needs to be captured
+			by the parameter declared in the signature of request handling method.
+			
+			This is done using '@RequestBody' annotation.
+			It is to be applied at the method signature parameter level.
+			
+			Once the REST end-point is created which handles a POST request, in order to 
+			verify its functionality, a dummy REST client can be used.
+			
+			In real-time project, it will be some Java Script enabled application e.g. Angular, React
+			and so on.
+			
+			Dummy REST client can be used for following benefits:
+				1. The REST API developer may not have any front end knowledge and wants to test
+					its functionality.
+				2. The REST API developer has front end knowledge but does not want to invest
+					time in building a separate Angular or React project.
+					
+			There are several dummy REST clients freely available.
+			The most commonly used are:
+				1. POSTMAN
+				2. Google's Talend API Tester
+				
+		Hitting the Database (Interaction with Database):
+			In many business applications, data is permanently maintained in some database.
+			REST API can also make use of Database as a permanent persistent store.
+			If the REST API is built using Java technology, there are several options available
+			to interact with Database.
+			E.g.
+				JDBC
+				Hibernate
+				JPA
+				
+			In any of these options mentioned above, developer has to write some persistence
+			related code.
+			
+			This can be simplified by eliminating the requirement of writing persistence related
+			code.
+			
+			It is possible using a separate module called as Spring Data JPA.
+			
+			It completely eliminates the persistence related code, adding a lot of simplicity.
+			This is made possible using some standardization with the help of an interface
+			known as 'JpaRepository'.
+				
+			It is a generic interface which mainly works upon 2 things:
+				1. Entity Type
+				2. ID Type
+				
+			It is used by using another interface which is its sub-interface.
+			
+		Once all the Java artifacts are implemented, it is necessary to configure JPA.
+		E.g.
+			Driver Class, URL, Username, Password, Show SQL
+			
+		This is done using 'application.properties'
+		
+	In Spring Data Jpa project, it is necessary to enable scanning of JpaRepository and
+	Entity class.
+	
+	This is possible using 2 annotations respectively:
+		1. @EnableJpaRepositories
+		2. @EntityScan
+		
+	These are to be applied at the configuration specific class level.
+	
+	
+	=============================THE END===================================
+				
+			
+			
+			
+				
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+	

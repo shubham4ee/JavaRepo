@@ -1,0 +1,204 @@
+Understanding JDBC API:
+	The JDBC API provides several classes and interfaces; rather many of them are interfaces.
+	It belongs to 'java.sql' package.
+	
+	The core API provides following:
+		1. DriverManager
+		2. Driver
+		3. Connection
+		4. Statement
+		5. PreparedStatement
+		6. CallableStatement : Used to invoke stored procedures available on DB side
+		7. ResultSet
+		
+	From the above list, except 'DriverManager', all remaining are interfaces.
+
+
+Steps for JDBC Program:
+	While writing any JDBC program, there are standard steps to be followed:
+		1. Load the driver
+		2. Establish Connection
+		3. Obtain some Statement
+		4. Execute SQL Query
+		5. For SELECT query, obtain the ResultSet (Record Set) and perform navigation.
+		
+	1. Load the driver
+		The JDBC driver is implemented using some Java class which is known as Driver Implementation Class.
+		It is to be loaded explicitly.
+		This is possible using a class from 'java.lang' named as 'Class'.
+		It provides a static method: forName(String) that is used to load the class.
+		This requires the relevant .class file to present in project's CLASSPATH otherwise ClassNotFoundException
+		is thrown. It is a CHECKED exception and therefore needs to be handled somewhere.
+		
+		In case of Type 4 drivers, since they are provided by the database vendor, the respective .class file is not 
+		available in the CLASSPATH by default; hence results into ClassNotFoundException.
+		
+		It is to be added explicitly by configuring project's BUILD PATH. Most of the times, this .class file is 
+		enclosed within a JAR (Java Archive) file. Therefore the relevant JAR file must be added.
+		
+	2. Establish Connection:
+		In order to establish Connection, assuming that the database implies security, 3 properties need to be 
+		configured:
+			1. Connection URL
+			2. User ID
+			3. Password
+			
+		Based upon these properties, a Connection can be established either using 'DriverManager' class or 'Driver'
+		interface.
+		
+		'DriverManager' class provides a static method: 'getConnection()' that is used to establish Connection.
+		If there is some problem e.g. invalid URL or user id or password, SQLException is thrown.
+		It is a CHECKED exception and therefore needs to be handled somewhere.
+		
+		If the connection is established successfully, the method returns the reference of type 'Connection'.
+		
+	3. Obtain some Statement:
+		Once the connection with the database is established, it's a time to execute some SQL query but for that
+		some Statement needs to be obtained.
+		
+		The type of Statement depends upon the query to be fired.
+		E.g.
+			In case of simple SELECT query, 'Statement' is used.
+			
+		To obtain 'Statement', 'Connection' interface provides 'createStatement()' method which returns 'Statement'.
+		
+	4. Execute SQL Query:
+		Once the 'Statement' is obtained, it can be used to execute SQL query. 
+		For SELECT queries, 'executeQuery()' method is used which returns 'ResultSet'
+		
+	5. Perform Navigation:
+		The data loaded from database is maintained in a separate object of type 'ResultSet'.
+		'ResultSet' is the representation of the data on client side.
+		Just like RDBMS, it also maintains data in tabular format e.g. rows and columns.
+		Every row has record position and column has column index.
+		Both of them start with 1.
+		
+		Apart from the actual record positions, there are 2 additional positions:
+			1. Before First
+			2. After Last
+			
+		Every ResultSet maintains a cursor which by default points to BeforeFirst position. To perform reading, 
+		the cursor should be shifted one step ahead every time.
+		
+		This is possible using 'next()' method of 'ResultSet'.
+		The method checks whether next record is available or not and according returns boolean value.
+		If it is available, returns true and shifts the curson 1 step ahead.
+		
+		Every column has index and it depends upon the actual query rather than the original table design.
+		To fetch the value, 'ResultSet' provides relevant getXXX() methods.
+		E.g.
+			getString() --> Returns String
+			getInt() --> Returns int
+			getFloat() --> Returns float
+			
+	Standard Practices in JDBC:
+		Generally JDBC programs are implemented using some standard practices. There are several standard 
+		practices which are important from JDBC perspective.
+		
+		1. Decoupling the code for establishing Connection using a separate class
+		2. Automatic loading of JDBC Driver
+		3. Opening the resources e.g. Connection, Statement etc using try-with-resources
+		4. Implementing DAO (Data Access Object) pattern.
+		
+	DAO Pattern:
+		It is a commonly used design pattern for performing CRUD operations.
+		Typically it starts with a generic interface and implemented by its corresponding implementation classes.
+		Since the interface is generic, typically its method names are also generic.
+		However, the class which implements this interface specifies the exact type and its name is also specific.
+		
+JDBC Queries:
+	In JDBC, queries are of 2 types:
+		1. Simple Queries
+		2. Parameterized Queries
+		
+	Simple Queries:
+		These are the queries without parameters.
+		To execute them, 'Statement' is used.
+		
+	Parameterized Queries:
+		These are the queries with parameters.
+		To execute them, 'PreparedStatement' is used.
+		This allows to cache the query so that the query can be fired with different values and without any
+		re-compilation.
+		
+		In JDBC, query parameters are denoted using '?'. These are unknown parameters and they have index
+		which starts from 1 and increments by 1 while moving from left to right.
+		
+		Before executing the query, it is necessary to substitute values in place of '?'.
+		All these things are possible by obtaining 'PreparedStatement'.
+		Connection interface provides 'prepareStatement()' method which returns 'PreparedStatement'.
+		
+		'PreparedStatement' provides several setXXX() methods to substitute values.
+		E.g.
+			setInt()
+			setString()
+			setFloat()
+			
+	Why JDBC Driver loading is required?
+		DriverManager can establish connection with the database using some driver only if that driver is registered
+		with DriverManager itself.
+		
+		This registration is done implicitly via 'static' block available in the driver implementation class.
+		Therefore it is just required to invoke this 'static' block by loading the driver specific class.
+		This is done using 'Class.forName(..)'. 
+		
+		*** It is not required in newer versions of Java as it is automatically loaded.
+		
+	Constituents of URL:
+		JDBC URLs are composed of several constituents.
+		E.g.
+			URL: jdbc:mysql://localhost:3306/training
+			
+			1. Main Protocol
+				All JDBC URLs have the main protocol as 'jdbc' itself.
+			2. Sub Protocol
+				This varies from database to database.
+				E.g.
+					In MySQL it is 'mysql', in Oracle it is 'oracle'
+			3. IP Address
+				It is the Inet Addess of the machine on which DB server is running
+				E.g.
+					localhost: It indicates the same machine acting as client as well as server.
+			4. Port No:
+				It is the service identifier which varies from database to database.		
+				E.g.
+				In MySQL it is 3306, in Oracle it is 1521
+			5. Service Name or Schema Name
+				In MySQL, it is Schema Name whereas in Oracle it is Service Name
+				
+	Handling DML Operations:
+		There are 3 commonly used DML operations:
+			INSERT, UPDATE and DELETE	
+			
+		To perform DML operation, 'executeQuery()' method is not used because it returns 'ResultSet' which is not
+		required in this case.
+		
+		Rather, this is done using 'executeUpdate()' method. It returns 'int' which indicates the number of records
+		affected due to the query.
+		
+	Performing DML UPDATE:
+		Typically, DML UPDATE can be performed on any column except primary key.
+		However, developer cannot anticipate the exact column count for which update is required.
+		Therefore it is better to include all those columns in the query so that the query can work for all the
+		possibilities.
+		
+
+
+								
+			
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	

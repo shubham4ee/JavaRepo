@@ -1,0 +1,286 @@
+Java EE:
+	Java EE stands for Java Enterprise Edition.
+	It is a platform used to build Web Based as well as Enterprise level applications.
+	
+	It is a specification and not an implementation.
+	E.g.
+		Java SE provides its own implementation but Java EE does not.
+		
+	Java EE emphasizes upon Component Driven Architecture.
+	
+	What is Component?
+		Component is an application level reusable piece of code.
+		
+	Components are of 2 types:
+		1. Unmanaged
+		2. Managed
+		
+	Unmanaged Components:
+		These are the components which are instantiated explicitly using 'new' keyword.
+		
+	Managed Components:
+		These are the components which get instantiated implicitly.
+		Developer does not instantiate them using 'new' keyword.
+		
+	In general, Java SE consists of Unmanaged Components and Java EE consists of Managed Components.
+	
+	Components in Java EE:
+		Java EE components are divided into 2 types:
+			1. Web Components
+			2. Business Components
+			
+		Web Components:
+			It is responsible for accepting a Web Request and generating a Web Response.
+			It is also used to perform processing on server side.
+			There are 2 types of Web Components:
+				1. Servlet
+				2. JSP
+				
+		Business Components:
+			It is responsible for handling business logic (domain specific logic) of the application.
+			It is implemented using EJB which stands for Enterprise Java Bean
+			
+		What is Enterprise Application:
+			Any application that requires Enterprise Services (Higher End Services) is known as Enterprise Application.
+			
+			E.g.
+				1. Scalability
+				2. Transaction Management
+				3. Security
+				4. Asynchronous Messaging
+				5. Concurrency
+				6. Persistency
+				
+			How Java EE components are managed?
+				Java EE components are managed using some runtime environment known as Container.
+				Since there are 2 types of Java EE components, there are 2 types of Containers.
+					1. Web Container
+					2. EJB Container
+					
+				Web Container is responsible for managing the life cycle of web components e.g. Servlet and JSP.
+				EJB Container is responsible for managing the life cycle of business components e.g. EJB
+				
+		How these containers are made available?
+			These containers are made available using some 3rd party softwares referred as servers.
+			Since there are 2 types of containers, there are 2 types of servers:
+				1. Web Server
+				2. Application Server
+				
+			Web Server:
+				It provides an environment known as Web Container.
+				There are so many web servers available in market.
+				The most commonly used and popular is Tomcat which is given by Apache Software Foundation.
+				
+			Application Server:
+				It is the enhanced form of Web Server because it provides Web Container as well as EJB Container.
+				There are so many application servers available in market.
+				E.g.
+					Weblogic by Oracle Corporation
+					Websphere by IBM
+					Glassfish by Oracle Corporation
+					JBoss by Red Hat
+					
+		Servlet:
+			It is a web component used to extend the functionality of web server.
+			It runs on server side and handles server side processing.
+			It is used to generate dynamic web contents.
+			
+			Why Servlets became popular?
+				Like servlets, there are other technologies available using which the same thing can be achieved.
+				
+				E.g.
+					1. DOT NET Framework
+					2. CGI (Common Gateway Interface) using PERL
+					3. PHP
+					4. Node JS (Since 2008)
+					
+				However servlets gained popularity for following reasons:
+					1. They are written in Java and therefore inherit all the features of Java:
+						E.g.
+							Platform Independent
+							Secured
+							Robust and so on
+					
+					2. They are multithreaded.
+							Every request is processed using a separate thread.
+							
+					3. They are lightweight
+					
+		Implementing Servlets:
+			Since servlets are written in Java, to implement them, it is necessary to write a Java class.
+			That class is referred as Servlet Implementation Class.
+			
+			This class has to make use of some API which is known as Servlet API.
+			
+			Servlet is a part of Java EE specification and therefore it is also a specification.
+			
+			As per the new versions, the brand name of Java EE has been changed to Jakarta EE.
+			
+			The Servlet API mainly consists of following packages:
+				1. jakarta.servlet
+				2. jakarta.servlet.http
+				
+				
+			The 1st package mainly provides following:
+				1. Servlet					:	It is the interface which must be implemented by Servlet Implementation Class
+				2. GenericServlet		: 	It is the abstract class which implements 'Servlet' interface
+				3. ServletRequest		:	It is the interface used to handle request
+				4. ServletResponse	: 	It is the interface used to handle response
+				
+			The 2nd package mainly provides following:
+				1. HttpServlet					: It is the abstract class which extends 'GenericServlet'
+				2. HttpServletRequest		: It is the interface which extends 'ServletRequest' and used to handle HTTP Request
+				3. HttpServletResponse	: It is the interface which extends 'ServletResponse' and used to handle HTTP Response
+				
+		The Servlet Implementation Class must follow one of the following:
+			1. Implement 'Servlet' interface
+				E.g.
+					public class MyServlet implements Servlet { ... }
+					
+			2. Extend 'GenericServlet' class
+				E.g.
+					public class MyServlet extends GenericServlet { ... }
+					
+			3. Extend 'HttpServlet' class
+				E.g.
+					public class MyServlet extends HttpServlet { .. }
+					
+			
+			The 1st option is not much in use because it enforces to implement the methods from the interface
+			irrespective of whether they are really required or not.	 
+			
+			The 2nd option is used to create servlet which is protocol independent. 
+			E.g.
+				Creating a servlet for handling FTP request.
+				
+			The 3rd option is used to create servlet which is specific to HTTP protocol.
+			E.g.
+				Creating a servlet for handling HTTP request and generating HTTP response.
+			
+			In a web application, the most commonly used protocol is HTTP and therefore this option is the most
+			frequently and commonly used option.
+			
+	Building Servlets:
+		Steps:
+			1. Create Dynamic Web Project
+					File -> New -> Dynamic Web Project
+						a) Provide Project Name
+						b) Select Target Runtime - Apache Tomcat 10 (Browse the Tomcat Installation Directory)
+						c) Check the checkbox : Generate web.xml deployment descriptor
+						d) Change the Context Root if required
+						e) Click on Finish
+						
+			2.	Creating Servlet 
+					a) Right click on Project and Select 'Servlet' option
+					b) Provide the package name and the class name
+					c) Configure other settings as per the requirement.
+							E.g.
+								Servlet Name, Description, Initialization Parameters, URL Mappings etc.
+					d) Select the constructor, method options as per the requirement and click Finish
+					
+			3. Servlet Registration
+					Once the Servlet class is written with the relevant logic, it needs to be registered within a separate
+					file which acts as a Deployment Descriptor.
+					
+					In any web application, this file is web.xml. It contains all the entries relevant to the configuration
+					of the application including servlets.
+					
+			4. Deployment
+					Once the project is developed, it is to be hosted on the Web Server so that web server can provide
+					support for that project. This is known as Deployment.
+					
+			5. Star the server
+					Once the project has been deployed on the server, in order to make it available, it is necessary
+					to start the server
+					
+			6. Open Web Browser and make the request
+					http://localhost:8888/Web_App/hello
+	
+	Is web.xml file really needed?	
+		As per the older versions of Servlet specification, this file is mandatory. Since version 3.0 of Servlet
+		specification, this file is optional.
+		
+		Tomcat server version 10 supports higher versions of servlets.		
+		
+		In these higher versions, an alternative is available that is Annotations.	
+		They are directly added in the source file.
+		
+	Life Cycle of Servlet:
+		The life cycle of servlet consists of 3 stages:
+			1. Instantiation and Initialization
+			2. Service
+			3. Destroy
+			
+		This life cycle is taken care by relevant methods which are called as life cycle methods.
+			1. init()
+			2. service()
+			3. destroy()
+			
+		1. Instantiation and Initialization:
+			When the servlet is requested for the very 1st time, it gets loaded by web container.
+			As soon as loading is finished, it gets instantiated (object is created).
+			As soon as instantiation is done, web container invokes 'init()' method.
+			After this, it invokes 'service()' method.
+			
+		2. Service
+			When the servlet is requested, every time, service() method gets invoked.
+			This is the most important method because it gets called every time when the servlet is requested.
+			
+		3. Destroy
+			When the server is stopped, this stage is encountered. At this time, web container invokes 'destroy()'
+			method. This method gets called even when the application is undeployed.
+			Like 'init()', this method also gets called only once.	
+			
+	All the life cycle methods are declared within 'Servlet' interface.	
+	In fact, this interface provides 5 methods:
+		1. init()
+		2. service()
+		3. destroy()
+		4. getServletConfig()
+		5. getServletInfo()
+		
+	'GenericServlet' class implements 'Servlet' interface and implements all the methods of that interface except
+	one: service()
+	
+	Since it does not fully implement the interface, it is an abstract class.
+	Therefore if the servlet specific class extends 'GenericServlet', it must override 'service()' method.
+	
+	The sub-class of 'GenericServlet' is 'HttpServlet' which already overrides 'service()' method.
+	However, this class is also an abstract class.
+	
+	The 'service()' method from 'HttpServlet' checks the type of incoming HTTP Request.
+	HTTP requests are divided into several types.
+		E.g.
+			GET
+			POST
+			PUT
+			DELETE
+			OPTIONS
+			TRACE
+			HEAD
+			PATCH
+			
+		Once the type is identified, it invokes the relevant 'doXXX()' method.
+		
+		E.g.
+			GET			====> doGet()
+			POST		====> doPost()
+			
+		When the servlet is requested by typing the URL in browser's address bar, always HTTP GET request is 
+		made.
+		
+		All these doXXX() methods are defined within 'HttpServlet' class. In order to customize the implementation,
+		it is necessary to override them.
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
